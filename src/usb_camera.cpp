@@ -42,7 +42,10 @@ void UsbCamera::Run() {
   Start();
 }
 
-void UsbCamera::End() { Stop(); }
+void UsbCamera::End() {
+  Stop();
+  Disconnect();
+}
 
 void UsbCamera::PublishImage(const cv::Mat &image) {
   // Construct a cv image
@@ -103,6 +106,10 @@ void UsbCamera::Stop() {
   acquire_ = false;
   // Wait for the tread to finish
   image_thread_->join();
+}
+
+void UsbCamera::Disconnect() {
+  camera_->release();
 }
 
 void UsbCamera::AcquireImages() {

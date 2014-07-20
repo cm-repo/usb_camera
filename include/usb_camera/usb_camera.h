@@ -50,6 +50,7 @@ class UsbCamera {
   void Configure(const UsbCameraConfig &config);
   void Start();
   void Stop();
+  void Disconnect();
   void AcquireImages();
   const bool IsAcquire() const { return acquire_; }
 
