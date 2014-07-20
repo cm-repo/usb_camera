@@ -20,10 +20,11 @@
     </node>
 
     <!-- run as plugin -->
+    <arg name="manager" default="usb_camera_nodelet"/>
     <node if="$(arg plugin)" pkg="nodelet" type="nodelet"
-        name="usb_camera_nodelet" args="manager" output="$(arg disp)"></node>
+        name="$(arg manager)" args="manager" output="$(arg disp)"></node>
     <node if="$(arg plugin)" pkg="nodelet" type="nodelet" name="usb_camera"
-        args="load usb_camera/UsbCameraNodelet usb_camera_nodelet"
+        args="load usb_camera/UsbCameraNodelet $(arg manager)"
         output="$(arg disp)">
         <param name="device" type="int" value="$(arg device)"/>
         <param name="frame_id" type="string" value="$(arg frame_id)"/>
