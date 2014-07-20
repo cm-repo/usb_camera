@@ -1,0 +1,34 @@
+<launch>
+    <arg name="plugin" default="false"/>
+    <arg name="disp" default="screen"/>
+
+    <arg name="device" default="0"/>
+    <arg name="frame_id" default="usb_camera"/>
+    <arg name="fps" default="20.0"/>
+    <arg name="calib_file" default="calib_usb_camera.yaml"/>
+    <arg name="calib_url" default="package://apriltag_ros/calib/$(arg calib_file)"/>
+    <arg name="color" default="false"/>
+
+    <!-- run as standalone -->
+    <node unless="$(arg plugin)" pkg="nodelet" type="nodelet" name="usb_camera"
+        args="standalone usb_camera/UsbCameraNodelet" output="$(arg disp)">
+        <param name="device" type="int" value="$(arg device)"/>
+        <param name="frame_id" type="string" value="$(arg frame_id)"/>
+        <param name="fps" type="double" value="$(arg fps)"/>
+        <param name="color" type="bool" value="$(arg color)"/>
+        <param name="calib_url" type="string" value="$(arg calib_url)"/>
+    </node>
+
+    <!-- run as plugin -->
+    <node if="$(arg plugin)" pkg="nodelet" type="nodelet"
+        name="usb_camera_nodelet" args="manager" output="$(arg disp)"></node>
+    <node if="$(arg plugin)" pkg="nodelet" type="nodelet" name="usb_camera"
+        args="load usb_camera/UsbCameraNodelet usb_camera_nodelet"
+        output="$(arg disp)">
+        <param name="device" type="int" value="$(arg device)"/>
+        <param name="frame_id" type="string" value="$(arg frame_id)"/>
+        <param name="fps" type="double" value="$(arg fps)"/>
+        <param name="color" type="bool" value="$(arg color)"/>
+        <param name="calib_url" type="string" value="$(arg calib_url)"/>
+    </node>
+</launch>
