@@ -3,7 +3,7 @@
     <arg name="frame_id" default="usb_camera"/>
     <arg name="fps" default="20.0"/>
     <arg name="calib_file" default="calib_usb_camera.yaml"/>
-    <arg name="calib_url" default="package://apriltag_ros/calib/$(arg calib_file)"/>
+    <arg name="calib_url" default="package://usb_camera/calib/$(arg calib_file)"/>
     <arg name="color" default="false"/>
 
     <node pkg="usb_camera" type="camera_node" name="camera" output="screen" >
