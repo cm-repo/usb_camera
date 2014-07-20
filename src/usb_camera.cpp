@@ -51,7 +51,6 @@ void UsbCamera::PublishImage(const cv::Mat &image) {
   // Construct a cv image
   std_msgs::Header header;
   header.stamp = ros::Time::now();
-  header.seq = seq_++;
   header.frame_id = frame_id_;
   std::string encodings;
   if (image.channels() == 1) {

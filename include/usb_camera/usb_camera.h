@@ -28,7 +28,6 @@ class UsbCamera {
  private:
   // ROS related
   ros::NodeHandle nh_;
-  unsigned seq_ = 0;
   std::string frame_id_;
   std::unique_ptr<ros::Rate> rate_;
   image_transport::ImageTransport it_;
