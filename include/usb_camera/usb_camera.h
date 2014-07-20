@@ -38,17 +38,24 @@ class UsbCamera {
   dynamic_reconfigure::Server<usb_camera::UsbCameraDynConfig> server_;
 
   // Video capture
+  std::string label_{"\033[0;34m[ USBC]:\033[0m "};
   std::unique_ptr<cv::VideoCapture> camera_;
+  int device_{0};
   bool color_{false};
   bool acquire_{false};
   typedef std::unique_ptr<std::thread> ThreadPtr;
   ThreadPtr image_thread_;
 
+  void Connect();
   void Configure(const UsbCameraConfig &config);
   void Start();
   void Stop();
   void AcquireImages();
   const bool IsAcquire() const { return acquire_; }
+
+  int width();
+  int height();
+  int exposure();
 
  public:
   UsbCamera(const ros::NodeHandle &nh);

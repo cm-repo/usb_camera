@@ -4,6 +4,8 @@
 
 namespace usb_camera {
 
+using std::cout;
+using std::endl;
 using sensor_msgs::CameraInfo;
 using sensor_msgs::CameraInfoPtr;
 using camera_info_manager::CameraInfoManager;
@@ -16,9 +18,7 @@ UsbCamera::UsbCamera(const ros::NodeHandle &nh) : nh_{nh}, it_{nh} {
   rate_.reset(new ros::Rate(fps));
 
   // Create a camera
-  int device;
-  nh_.param<int>("device", device, 0);
-  camera_.reset(new cv::VideoCapture(device));
+  nh_.param<int>("device", device_, 0);
 
   // Setup camera publisher and dyanmic reconfigure callback
   std::string calib_url;
@@ -37,6 +37,7 @@ UsbCamera::UsbCamera(const ros::NodeHandle &nh) : nh_{nh}, it_{nh} {
 void UsbCamera::Run() {
   UsbCameraConfig config;
   nh_.param<bool>("color", config.color, false);
+  Connect();
   Configure(config);
   Start();
 }
@@ -75,9 +76,17 @@ void UsbCamera::ReconfigureCallback(usb_camera::UsbCameraDynConfig &config,
   Configure(usb_camera_config);
 }
 
+void UsbCamera::Connect() {
+  camera_.reset(new cv::VideoCapture(device_));
+  cout << label_ << "Connecting to camera " << device_ << endl;
+}
+
 void UsbCamera::Configure(const UsbCameraConfig &config) {
-  ROS_INFO("Configuring camera");
+  cout << label_ << "Configuring camera" << endl;
   color_ = config.color;
+  // Print final setting
+  cout << label_ << "color: " << color_ << " exposure: " << exposure()
+       << " width: " << width() << " height: " << height() << endl;
 }
 
 void UsbCamera::Start() {
@@ -85,11 +94,11 @@ void UsbCamera::Start() {
   acquire_ = true;
   // Create a new thread for acquisition
   image_thread_.reset(new std::thread(&UsbCamera::AcquireImages, this));
-  ROS_INFO("Starting camera");
+  cout << label_ << "Starting camera" << endl;
 }
 
 void UsbCamera::Stop() {
-  std::cout << "stopping camera" << std::endl;
+  cout << label_ << "Stopping camera" << endl;
   // Set acquire to false to stop the thread
   acquire_ = false;
   // Wait for the tread to finish
@@ -107,6 +116,18 @@ void UsbCamera::AcquireImages() {
     }
     PublishImage(image_raw);
   }
+}
+
+inline int UsbCamera::width() {
+  return camera_->get(CV_CAP_PROP_FRAME_WIDTH);
+}
+
+inline int UsbCamera::height() {
+  return camera_->get(CV_CAP_PROP_FRAME_HEIGHT);
+}
+
+inline int UsbCamera::exposure() {
+  return camera_->get(CV_CAP_PROP_EXPOSURE);
 }
 
 }  // namespace usb_camera
