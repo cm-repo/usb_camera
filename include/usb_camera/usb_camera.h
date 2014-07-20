@@ -55,7 +55,6 @@ class UsbCamera {
 
   int width();
   int height();
-  int exposure();
 
  public:
   UsbCamera(const ros::NodeHandle &nh);

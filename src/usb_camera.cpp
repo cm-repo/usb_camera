@@ -85,7 +85,7 @@ void UsbCamera::Configure(const UsbCameraConfig &config) {
   cout << label_ << "Configuring camera" << endl;
   color_ = config.color;
   // Print final setting
-  cout << label_ << "color: " << color_ << " exposure: " << exposure()
+  cout << label_ << "color: " << color_
        << " width: " << width() << " height: " << height() << endl;
 }
 
@@ -124,10 +124,6 @@ inline int UsbCamera::width() {
 
 inline int UsbCamera::height() {
   return camera_->get(CV_CAP_PROP_FRAME_HEIGHT);
-}
-
-inline int UsbCamera::exposure() {
-  return camera_->get(CV_CAP_PROP_EXPOSURE);
 }
 
 }  // namespace usb_camera
