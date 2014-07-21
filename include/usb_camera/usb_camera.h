@@ -51,7 +51,7 @@ class UsbCamera {
   void Stop();
   void Disconnect();
   void AcquireImages();
-  const bool IsAcquire() const { return acquire_; }
+  void SetRate(double fps);
 
   int width();
   int height();

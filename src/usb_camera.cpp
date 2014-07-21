@@ -11,11 +11,10 @@ using sensor_msgs::CameraInfoPtr;
 using camera_info_manager::CameraInfoManager;
 
 UsbCamera::UsbCamera(const ros::NodeHandle &nh) : nh_{nh}, it_{nh} {
-  nh_.param<std::string>("frame_id", frame_id_, std::string("camera"));
+  nh_.param<std::string>("frame_id", frame_id_, std::string("usb_camera"));
   double fps;
   nh_.param<double>("fps", fps, 20.0);
-  ROS_ASSERT_MSG(fps > 0, "Camera: fps must be greater than 0");
-  rate_.reset(new ros::Rate(fps));
+  SetRate(fps);
 
   // Create a camera
   nh_.param<int>("device", device_, 0);
@@ -32,6 +31,10 @@ UsbCamera::UsbCamera(const ros::NodeHandle &nh) : nh_{nh}, it_{nh} {
   camera_pub_ = it_.advertiseCamera("image_raw", 1);
   server_.setCallback(
       boost::bind(&UsbCamera::ReconfigureCallback, this, _1, _2));
+}
+
+void UsbCamera::SetRate(double fps) {
+  rate_.reset(new ros::Rate(fps));
 }
 
 void UsbCamera::Run() {
@@ -70,12 +73,13 @@ void UsbCamera::ReconfigureCallback(usb_camera::UsbCameraDynConfig &config,
                                     int level) {
   // Do nothing when first starting
   if (level < 0) {
+    ROS_INFO("Initializing dynamic reconfigure server");
     return;
   }
   // Get config
-  UsbCameraConfig usb_camera_config;
-  usb_camera_config.color = config.color;
-  Configure(usb_camera_config);
+  UsbCameraConfig new_config;
+  new_config.color = config.color;
+  Configure(new_config);
 }
 
 void UsbCamera::Connect() {
