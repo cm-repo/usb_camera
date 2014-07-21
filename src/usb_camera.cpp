@@ -77,6 +77,7 @@ void UsbCamera::ReconfigureCallback(usb_camera::UsbCameraDynConfig &config,
     return;
   }
   // Get config
+  SetRate(config.fps);
   UsbCameraConfig new_config;
   new_config.color = config.color;
   Configure(new_config);
