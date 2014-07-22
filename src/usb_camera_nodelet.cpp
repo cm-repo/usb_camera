@@ -8,7 +8,7 @@ namespace usb_camera {
 
 class UsbCameraNodelet : public nodelet::Nodelet {
  public:
-  UsbCameraNodelet() : nodelet::Nodelet() {};
+  UsbCameraNodelet() : nodelet::Nodelet() {}
   ~UsbCameraNodelet() { usb_camera_->End(); }
 
   virtual void onInit() {
