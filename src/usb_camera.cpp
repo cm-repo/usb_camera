@@ -28,7 +28,7 @@ UsbCamera::UsbCamera(const ros::NodeHandle &nh) : nh_{nh}, it_{nh} {
   }
   cinfo_ = CameraInfoPtr(new CameraInfo(cinfo_manager.getCameraInfo()));
 
-  camera_pub_ = it_.advertiseCamera("image_raw", 1);
+  camera_pub_ = it_.advertiseCamera("image", 1);
   server_.setCallback(
       boost::bind(&UsbCamera::ReconfigureCallback, this, _1, _2));
 }
