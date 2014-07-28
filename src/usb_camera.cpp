@@ -11,7 +11,7 @@ using sensor_msgs::CameraInfoPtr;
 using camera_info_manager::CameraInfoManager;
 
 UsbCamera::UsbCamera(const ros::NodeHandle &nh) : nh_{nh}, it_{nh} {
-  nh_.param<std::string>("frame_id", frame_id_, std::string("usb_camera"));
+  nh_.param<std::string>("frame_id", frame_id_, "usb_camera");
   double fps;
   nh_.param<double>("fps", fps, 20.0);
   SetRate(fps);
@@ -28,7 +28,7 @@ UsbCamera::UsbCamera(const ros::NodeHandle &nh) : nh_{nh}, it_{nh} {
   }
   cinfo_ = CameraInfoPtr(new CameraInfo(cinfo_manager.getCameraInfo()));
 
-  camera_pub_ = it_.advertiseCamera("image", 1);
+  camera_pub_ = it_.advertiseCamera("image_raw", 1);
   server_.setCallback(
       boost::bind(&UsbCamera::ReconfigureCallback, this, _1, _2));
 }
@@ -50,10 +50,10 @@ void UsbCamera::End() {
   Disconnect();
 }
 
-void UsbCamera::PublishImage(const cv::Mat &image) {
+void UsbCamera::PublishImage(const cv::Mat &image, const ros::Time &time) {
   // Construct a cv image
   std_msgs::Header header;
-  header.stamp = ros::Time::now();
+  header.stamp = time;
   header.frame_id = frame_id_;
   std::string encodings;
   if (image.channels() == 1) {
@@ -125,7 +125,7 @@ void UsbCamera::AcquireImages() {
     } else if (!color_ && image_raw.channels() == 3) {
       cv::cvtColor(image_raw, image_raw, CV_BGR2GRAY);
     }
-    PublishImage(image_raw);
+    PublishImage(image_raw, ros::Time::now());
   }
 }
 

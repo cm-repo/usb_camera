@@ -26,6 +26,8 @@ struct UsbCameraConfig {
 
 class UsbCamera {
  private:
+  typedef std::unique_ptr<std::thread> ThreadPtr;
+
   // ROS related
   ros::NodeHandle nh_;
   std::string frame_id_;
@@ -42,7 +44,6 @@ class UsbCamera {
   int device_{0};
   bool color_{false};
   bool acquire_{false};
-  typedef std::unique_ptr<std::thread> ThreadPtr;
   ThreadPtr image_thread_;
 
   void Connect();
@@ -58,12 +59,10 @@ class UsbCamera {
 
  public:
   UsbCamera(const ros::NodeHandle &nh);
-  UsbCamera(const UsbCamera &) = delete;
-  UsbCamera &operator=(const UsbCamera &) = delete;
 
   void Run();
   void End();
-  void PublishImage(const cv::Mat &image);
+  void PublishImage(const cv::Mat &image, const ros::Time &time);
   void ReconfigureCallback(usb_camera::UsbCameraDynConfig &config, int level);
 };  // class Camera
 
