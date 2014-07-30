@@ -1,0 +1,20 @@
+image_width: 640
+image_height: 480
+camera_name: e40
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [600.9137521571416, 0, 306.0342776297989, 0, 602.7842467794078, 243.1261248145244, 0, 0, 1]
+distortion_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [0.28860426216465, -0.7375852282325936, -0.001491165586043761, -0.0003044992133352673, 0]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1, 0, 0, 0, 1, 0, 0, 0, 1]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [581.7621459960938, 0, 299.5080122077597, 0, 0, 573.67626953125, 242.4240688324935, 0, 0, 0, 1, 0]

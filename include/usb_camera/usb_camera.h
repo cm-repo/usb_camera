@@ -26,7 +26,9 @@ struct UsbCameraConfig {
 
 class UsbCamera {
  private:
-  typedef std::unique_ptr<std::thread> ThreadPtr;
+  using ThreadPtr = std::unique_ptr<std::thread>;
+  using CameraInfoManagerPtr =
+      std::unique_ptr<camera_info_manager::CameraInfoManager>;
 
   // ROS related
   ros::NodeHandle nh_;
@@ -34,8 +36,9 @@ class UsbCamera {
   std::unique_ptr<ros::Rate> rate_;
   image_transport::ImageTransport it_;
   image_transport::CameraPublisher camera_pub_;
-  sensor_msgs::ImagePtr image_;
   sensor_msgs::CameraInfoPtr cinfo_;
+  CameraInfoManagerPtr cinfo_manager_;
+
   dynamic_reconfigure::Server<usb_camera::UsbCameraDynConfig> server_;
 
   // Video capture

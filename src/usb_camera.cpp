@@ -22,11 +22,12 @@ UsbCamera::UsbCamera(const ros::NodeHandle &nh) : nh_{nh}, it_{nh} {
   // Setup camera publisher and dyanmic reconfigure callback
   std::string calib_url;
   nh_.param<std::string>("calib_url", calib_url, "");
-  CameraInfoManager cinfo_manager(nh_, frame_id_, calib_url);
-  if (!cinfo_manager.isCalibrated()) {
+  cinfo_manager_.reset(
+      new camera_info_manager::CameraInfoManager(nh_, frame_id_, calib_url));
+  if (!cinfo_manager_->isCalibrated()) {
     ROS_WARN_STREAM("Camera: " << frame_id_ << " not calibrated");
   }
-  cinfo_ = CameraInfoPtr(new CameraInfo(cinfo_manager.getCameraInfo()));
+  cinfo_ = CameraInfoPtr(new CameraInfo(cinfo_manager_->getCameraInfo()));
 
   camera_pub_ = it_.advertiseCamera("image_raw", 1);
   server_.setCallback(
@@ -63,9 +64,8 @@ void UsbCamera::PublishImage(const cv::Mat &image, const ros::Time &time) {
   }
   // Convert to ros iamge msg and publish camera
   cv_bridge::CvImage cv_image(header, encodings, image);
-  image_ = cv_image.toImageMsg();
-  cinfo_->header = image_->header;
-  camera_pub_.publish(image_, cinfo_);
+  cinfo_->header = header;
+  camera_pub_.publish(cv_image.toImageMsg(), cinfo_);
   rate_->sleep();
 }
 
