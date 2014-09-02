@@ -5,7 +5,7 @@
     <arg name="camera" default="webcam"/>
     <arg name="fps" default="20.0"/>
     <arg name="calib_url"
-        default="package://usb_camera/calib/calib_$(arg camera)"/>
+        default="package://usb_camera/calib/calib_$(arg camera).yml"/>
 
     <!-- Standalone -->
     <arg name="plugin" default="false"/>
