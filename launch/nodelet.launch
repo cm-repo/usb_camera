@@ -3,32 +3,27 @@
     <arg name="device" default="0"/>
     <arg name="frame_id" default="webcam"/>
     <arg name="camera" default="webcam"/>
-    <arg name="fps" default="20.0"/>
+    <arg name="fps" default="15.0"/>
     <arg name="calib_url"
         default="package://usb_camera/calib/calib_$(arg camera).yml"/>
 
-    <!-- Standalone -->
-    <arg name="plugin" default="false"/>
     <arg name="output" default="screen"/>
-    <node unless="$(arg plugin)" pkg="nodelet" type="nodelet"
-        name="$(arg camera)" output="$(arg output)"
-        args="standalone usb_camera/UsbCameraNodelet" >
-        <param name="device" type="string" value="$(arg device)"/>
-        <param name="frame_id" type="string" value="$(arg frame_id)"/>
-        <param name="camera" type="string" value="$(arg camera)"/>
-        <param name="calib_url" type="string" value="$(arg calib_url)"/>
-        <param name="fps" type="double" value="$(arg fps)"/>
-    </node>
+    <arg name="plugin" default="false"/>
+    <!-- Standalone -->
+    <arg unless="$(arg plugin)" name="option"
+        value="standalone usb_camera/UsbCameraNodelet"/>
 
     <!-- Manager -->
-    <arg name="manager" default="usb_camera_nodelet"/>
+    <arg if="$(arg plugin)" name="manager" default="usb_camera_nodelet"/>
+    <arg if="$(arg plugin)" name="option"
+        value="load usb_camera/UsbCameraNodelet $(arg manager)"/>
     <node if="$(arg plugin)" pkg="nodelet" type="nodelet"
         name="$(arg manager)" args="manager" output="$(arg output)">
     </node>
+
     <!-- Nodelet -->
-    <node if="$(arg plugin)" pkg="nodelet" type="nodelet"
-        name="$(arg camera)" output="$(arg output)"
-        args="load usb_camera/UsbCameraNodelet $(arg manager)">
+    <node pkg="nodelet" type="nodelet" name="$(arg camera)"
+        output="$(arg output)" args="$(arg option)">
         <param name="device" type="string" value="$(arg device)"/>
         <param name="frame_id" type="string" value="$(arg frame_id)"/>
         <param name="camera" type="string" value="$(arg camera)"/>

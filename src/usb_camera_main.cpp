@@ -1,4 +1,5 @@
 #include <ros/ros.h>
+
 #include "usb_camera/usb_camera_node.h"
 
 int main(int argc, char **argv) {
@@ -12,7 +13,7 @@ int main(int argc, char **argv) {
     usb_camera_node.End();
   }
   catch (const std::exception &e) {
-    ROS_ERROR_STREAM("usb_camera: " << e.what());
+    ROS_ERROR_STREAM(nh.getNamespace() << e.what());
     return -1;
   }
 }

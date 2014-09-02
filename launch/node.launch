@@ -3,7 +3,7 @@
     <arg name="device" default="0"/>
     <arg name="frame_id" default="webcam"/>
     <arg name="camera" default="webcam"/>
-    <arg name="fps" default="20.0"/>
+    <arg name="fps" default="15.0"/>
     <arg name="calib_url"
         default="package://usb_camera/calib/calib_$(arg camera).yml"/>
 
