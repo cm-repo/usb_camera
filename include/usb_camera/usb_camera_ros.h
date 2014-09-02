@@ -8,16 +8,15 @@ namespace usb_camera {
 
 class UsbCameraRos : public CameraRosBase {
  public:
-  UsbCameraRos(const ros::NodeHandle &nh) : CameraRosBase{nh} {
-    std::string device;
-    nh.param<std::string>("device", device, "0");
-    usb_camera_.reset(new usb_camera::UsbCamera{std::stoi(device)});
+  UsbCameraRos(const ros::NodeHandle &nh)
+      : CameraRosBase{nh}, usb_camera_{std::stoi(identifier())} {
+    SetHardwareId(identifier());
   }
 
   virtual bool Grab(const sensor_msgs::ImagePtr &image_msg) override;
 
  private:
-  std::unique_ptr<UsbCamera> usb_camera_;
+  UsbCamera usb_camera_;
 };
 
 }  // namespace usb_camera

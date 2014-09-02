@@ -25,7 +25,7 @@
     <!-- Nodelet -->
     <node pkg="nodelet" type="nodelet" name="$(arg camera)"
         output="$(arg output)" args="$(arg option)">
-        <param name="device" type="string" value="$(arg device)"/>
+        <param name="identifier" type="string" value="$(arg device)"/>
         <param name="frame_id" type="string" value="$(arg frame_id)"/>
         <param name="camera" type="string" value="$(arg camera)"/>
         <param name="calib_url" type="string" value="$(arg calib_url)"/>

@@ -4,7 +4,7 @@ namespace usb_camera {
 
 bool UsbCameraRos::Grab(const sensor_msgs::ImagePtr &image_msg) {
   cv::Mat image;
-  if (!usb_camera_->GrabImage(image)) {
+  if (!usb_camera_.GrabImage(image)) {
     return false;
   }
   image_msg->height = image.rows;

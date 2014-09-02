@@ -11,7 +11,7 @@
     <arg name="output" default="screen"/>
     <node pkg="usb_camera" type="usb_camera_node" name="$(arg camera)"
         output="$(arg output)">
-        <param name="device" type="string" value="$(arg device)"/>
+        <param name="identifier" type="string" value="$(arg device)"/>
         <param name="frame_id" type="string" value="$(arg frame_id)"/>
         <param name="camera" type="string" value="$(arg camera)"/>
         <param name="calib_url" type="string" value="$(arg calib_url)"/>
