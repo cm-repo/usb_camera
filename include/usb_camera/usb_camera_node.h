@@ -1,22 +1,22 @@
 #ifndef USB_CAMERA_NODE_H_
 #define USB_CAMERA_NODE_H_
 
-#include "usb_camera/ros_usb_camera.h"
+#include "usb_camera/usb_camera_ros.h"
 #include "usb_camera/UsbCameraDynConfig.h"
 #include "camera_base/camera_node_base.h"
 
 namespace usb_camera {
 
-class UsbCameraNode : public CameraNodeBase<usb_camera::UsbCameraDynConfig> {
+class UsbCameraNode : public CameraNodeBase<UsbCameraDynConfig> {
  public:
   UsbCameraNode(const ros::NodeHandle& nh)
-      : CameraNodeBase{nh}, ros_usb_camera_{nh} {}
+      : CameraNodeBase{nh}, usb_camera_ros_{nh} {}
 
   virtual void Acquire() override;
-  virtual void Setup(usb_camera::UsbCameraDynConfig& config) override;
+  virtual void Setup(UsbCameraDynConfig& config) override;
 
  private:
-  usb_camera::RosUsbCamera ros_usb_camera_;
+  UsbCameraRos usb_camera_ros_;
 };
 
 }  // namespace usb_camera

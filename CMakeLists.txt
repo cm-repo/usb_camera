@@ -26,7 +26,7 @@ include_directories(
     )
 
 add_library(${PROJECT_NAME}
-    src/ros_usb_camera.cpp
+    src/usb_camera_ros.cpp
     src/usb_camera_node.cpp
     src/usb_camera_nodelet.cpp
     )

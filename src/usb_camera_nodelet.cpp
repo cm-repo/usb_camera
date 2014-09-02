@@ -22,7 +22,7 @@ class UsbCameraNodelet : public nodelet::Nodelet {
   }
 
  private:
-  std::unique_ptr<usb_camera::UsbCameraNode> usb_camera_node_;
+  std::unique_ptr<UsbCameraNode> usb_camera_node_;
 };
 
 PLUGINLIB_DECLARE_CLASS(usb_camera, UsbCameraNodelet,

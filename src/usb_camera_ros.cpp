@@ -1,8 +1,8 @@
-#include "usb_camera/ros_usb_camera.h"
+#include "usb_camera/usb_camera_ros.h"
 
 namespace usb_camera {
 
-bool RosUsbCamera::Grab(const sensor_msgs::ImagePtr &image_msg) {
+bool UsbCameraRos::Grab(const sensor_msgs::ImagePtr &image_msg) {
   cv::Mat image;
   if (!usb_camera_->GrabImage(image)) {
     return false;

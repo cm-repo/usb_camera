@@ -9,6 +9,7 @@
 
     <arg name="output" default="screen"/>
     <arg name="plugin" default="false"/>
+
     <!-- Standalone -->
     <arg unless="$(arg plugin)" name="option"
         value="standalone usb_camera/UsbCameraNodelet"/>
