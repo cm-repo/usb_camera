@@ -9,8 +9,9 @@ namespace usb_camera {
 class UsbCameraRos : public CameraRosBase {
  public:
   UsbCameraRos(const ros::NodeHandle &nh)
-      : CameraRosBase{nh}, usb_camera_{std::stoi(identifier())} {
-    SetHardwareId(identifier());
+      : CameraRosBase{nh},
+        usb_camera_{identifier().empty() ? 0 : std::stoi(identifier())} {
+    SetHardwareId(usb_camera_.device());
   }
 
   virtual bool Grab(const sensor_msgs::ImagePtr &image_msg) override;

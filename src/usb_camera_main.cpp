@@ -13,7 +13,6 @@ int main(int argc, char **argv) {
     usb_camera_node.End();
   }
   catch (const std::exception &e) {
-    ROS_ERROR_STREAM(nh.getNamespace() << e.what());
-    return -1;
+    ROS_ERROR("%s: %s", nh.getNamespace().c_str(), e.what());
   }
 }

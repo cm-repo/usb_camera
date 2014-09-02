@@ -1,5 +1,5 @@
 <launch>
-    <!-- Settings -->
+    <!-- Camera Settings -->
     <arg name="device" default="0"/>
     <arg name="frame_id" default="webcam"/>
     <arg name="camera" default="webcam"/>
@@ -7,10 +7,16 @@
     <arg name="calib_url"
         default="package://usb_camera/calib/calib_$(arg camera).yml"/>
 
-    <!-- Node -->
+    <!-- Node Settings -->
     <arg name="output" default="screen"/>
+    <arg name="respawn" default="false"/>
+    <arg name="proc" default="false"/>
+    <arg name="view" default="false"/>
+    <arg name="calib" default="false"/>
+
+    <!-- Node -->
     <node pkg="usb_camera" type="usb_camera_node" name="$(arg camera)"
-        output="$(arg output)">
+        respawn="$(arg respawn)" output="$(arg output)">
         <param name="identifier" type="string" value="$(arg device)"/>
         <param name="frame_id" type="string" value="$(arg frame_id)"/>
         <param name="camera" type="string" value="$(arg camera)"/>
@@ -18,15 +24,18 @@
         <param name="fps" type="double" value="$(arg fps)"/>
     </node>
 
+    <!-- Proc -->
+    <node if="$(arg proc)" pkg="image_proc" type="image_proc"
+        name="image_proc" ns="$(arg camera)">
+    </node>
+
     <!-- View -->
-    <arg name="view" default="false"/>
     <node if="$(arg view)" pkg="image_view" type="image_view"
         name="$(arg camera)_raw" output="$(arg output)"
         args="image:=/$(arg camera)/image_raw">
     </node>
 
     <!-- Calib -->
-    <arg name="calib" default="false"/>
     <group if="$(arg calib)">
         <arg name="pattern" default="chessboard"/>
         <arg name="size"/>
