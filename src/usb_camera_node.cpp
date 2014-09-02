@@ -1,18 +1,17 @@
-#include "usb_camera/usb_camera.h"
+#include "usb_camera/usb_camera_node.h"
 
-int main(int argc, char **argv) {
-  ros::init(argc, argv, "usb_camera");
-  ros::NodeHandle nh("~");
+namespace usb_camera {
 
-  try {
-    usb_camera::UsbCamera usb_camera(nh);
-    usb_camera.Run();
-    ros::spin();
-    usb_camera.End();
+void UsbCameraNode::Acquire() {
+  while (is_acquire() && ros::ok()) {
+    ros::Time time = ros::Time::now();
+    ros_usb_camera_.Publish(time);
+    Sleep();
   }
-  catch (const std::exception &e) {
-    ROS_ERROR_STREAM("usb_camera: " << e.what());
-  }
-
-  return 0;
 }
+
+void UsbCameraNode::Setup(usb_camera::UsbCameraDynConfig& config) {
+  ros_usb_camera_.set_fps(config.fps);
+}
+
+}  // namespace usb_camera
