@@ -7,12 +7,14 @@ bool UsbCameraRos::Grab(const sensor_msgs::ImagePtr &image_msg) {
   if (!usb_camera_.GrabImage(image)) {
     return false;
   }
+  // Assemble image_msg
+  auto channels = image.channels();
   image_msg->height = image.rows;
   image_msg->width = image.cols;
-  image_msg->step = image_msg->width * image.channels();
-  if (image.channels() == 1) {
+  image_msg->step = image_msg->width * channels;
+  if (channels == 1) {
     image_msg->encoding = sensor_msgs::image_encodings::MONO8;
-  } else if (image.channels() == 3) {
+  } else if (channels == 3) {
     image_msg->encoding = sensor_msgs::image_encodings::BGR8;
   }
   auto data_size = image_msg->height * image_msg->step;
