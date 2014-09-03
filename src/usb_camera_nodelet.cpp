@@ -9,7 +9,11 @@ namespace usb_camera {
 class UsbCameraNodelet : public nodelet::Nodelet {
  public:
   UsbCameraNodelet() : nodelet::Nodelet() {}
-  ~UsbCameraNodelet() { usb_camera_node_->End(); }
+  ~UsbCameraNodelet() {
+    if (usb_camera_node_) {
+      usb_camera_node_->End();
+    }
+  }
 
   virtual void onInit() {
     try {
