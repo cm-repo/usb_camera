@@ -1,74 +1,37 @@
-#ifndef USB_CAMERA_USB_CAMERA_H_
-#define USB_CAMERA_USB_CAMERA_H_
+#ifndef USB_CAMERA_H_
+#define USB_CAMERA_H_
 
 #include <memory>
 #include <thread>
-
-#include <ros/ros.h>
-#include <image_transport/image_transport.h>
-#include <sensor_msgs/Image.h>
-#include <sensor_msgs/CameraInfo.h>
-#include <sensor_msgs/image_encodings.h>
-#include <camera_info_manager/camera_info_manager.h>
-#include <dynamic_reconfigure/server.h>
 
 #include "opencv2/core/core.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
 
-#include "usb_camera/UsbCameraDynConfig.h"
-
 namespace usb_camera {
 
-struct UsbCameraConfig {
-  bool color{false};
-};
-
 class UsbCamera {
- private:
-  using ThreadPtr = std::unique_ptr<std::thread>;
-  using CameraInfoManagerPtr =
-      std::unique_ptr<camera_info_manager::CameraInfoManager>;
-
-  // ROS related
-  ros::NodeHandle nh_;
-  std::string frame_id_;
-  std::unique_ptr<ros::Rate> rate_;
-  image_transport::ImageTransport it_;
-  image_transport::CameraPublisher camera_pub_;
-  sensor_msgs::CameraInfoPtr cinfo_;
-  CameraInfoManagerPtr cinfo_manager_;
-
-  dynamic_reconfigure::Server<usb_camera::UsbCameraDynConfig> server_;
-
-  // Video capture
-  std::string label_{"\033[0;34m[ USBC]:\033[0m "};
-  std::unique_ptr<cv::VideoCapture> camera_;
-  int device_{0};
-  bool color_{false};
-  bool acquire_{false};
-  ThreadPtr image_thread_;
-
-  void Connect();
-  void Configure(const UsbCameraConfig &config);
-  void Start();
-  void Stop();
-  void Disconnect();
-  void AcquireImages();
-  void SetRate(double fps);
-
-  int width();
-  int height();
-
  public:
-  UsbCamera(const ros::NodeHandle &nh);
+  UsbCamera(int device) : device_{std::to_string(device)}, capture_{device} {
+    if (!capture_.isOpened()) {
+      throw std::runtime_error(std::string("Invalid device id: ") + device_);
+    }
+  }
 
-  void Run();
-  void End();
-  void PublishImage(const cv::Mat &image, const ros::Time &time);
-  void ReconfigureCallback(usb_camera::UsbCameraDynConfig &config, int level);
-};  // class Camera
+  UsbCamera(const UsbCamera&) = delete;
+  UsbCamera& operator=(const UsbCamera&) = delete;
+
+  const std::string& device() const { return device_; }
+  int width() { return capture_.get(CV_CAP_PROP_FRAME_WIDTH); }
+  int height() { return capture_.get(CV_CAP_PROP_FRAME_HEIGHT); }
+
+  bool GrabImage(cv::Mat& image) { return capture_.read(image); }
+
+ private:
+  std::string device_;
+  cv::VideoCapture capture_;
+};
 
 }  // namespace usb_camera
 
-#endif  // USB_CAMERA_USB_CAMERA_H_
+#endif  // USB_CAMERA_H_

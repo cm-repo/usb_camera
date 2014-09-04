@@ -1,4 +1,4 @@
-#include "usb_camera/usb_camera.h"
+#include "usb_camera/usb_camera_node.h"
 
 #include <ros/ros.h>
 #include <nodelet/nodelet.h>
@@ -9,18 +9,27 @@ namespace usb_camera {
 class UsbCameraNodelet : public nodelet::Nodelet {
  public:
   UsbCameraNodelet() : nodelet::Nodelet() {}
-  ~UsbCameraNodelet() { usb_camera_->End(); }
+  ~UsbCameraNodelet() {
+    if (usb_camera_node_) {
+      usb_camera_node_->End();
+    }
+  }
 
   virtual void onInit() {
-    usb_camera_.reset(new UsbCamera(getPrivateNodeHandle()));
-    usb_camera_->Run();
+    try {
+      usb_camera_node_.reset(new UsbCameraNode(getPrivateNodeHandle()));
+      usb_camera_node_->Run();
+    }
+    catch (const std::exception &e) {
+      NODELET_ERROR("%s: %s", getPrivateNodeHandle().getNamespace().c_str(),
+                    e.what());
+    }
   }
 
  private:
-  std::unique_ptr<usb_camera::UsbCamera> usb_camera_;
+  std::unique_ptr<UsbCameraNode> usb_camera_node_;
 };
 
-PLUGINLIB_DECLARE_CLASS(usb_camera, UsbCameraNodelet,
-                        usb_camera::UsbCameraNodelet, nodelet::Nodelet)
+PLUGINLIB_EXPORT_CLASS(UsbCameraNodelet, nodelet::Nodelet)
 
 }  // namespace usb_camera
