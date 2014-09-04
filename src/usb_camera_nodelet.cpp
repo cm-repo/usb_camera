@@ -30,6 +30,6 @@ class UsbCameraNodelet : public nodelet::Nodelet {
   std::unique_ptr<UsbCameraNode> usb_camera_node_;
 };
 
-PLUGINLIB_EXPORT_CLASS(UsbCameraNodelet, nodelet::Nodelet)
+PLUGINLIB_EXPORT_CLASS(usb_camera::UsbCameraNodelet, nodelet::Nodelet)
 
 }  // namespace usb_camera
