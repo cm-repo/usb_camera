@@ -4,9 +4,7 @@ project(usb_camera)
 add_definitions(-std=c++11 -Wall)
 
 find_package(catkin REQUIRED COMPONENTS
-    roscpp nodelet image_transport
-    sensor_msgs camera_info_manager
-    dynamic_reconfigure diagnostic_updater
+    roscpp nodelet camera_base
     )
 find_package(OpenCV)
 
