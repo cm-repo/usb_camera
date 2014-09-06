@@ -14,7 +14,8 @@ class UsbCameraRos : public CameraRosBase {
     SetHardwareId(usb_camera_.device());
   }
 
-  virtual bool Grab(const sensor_msgs::ImagePtr &image_msg) override;
+  virtual bool Grab(const sensor_msgs::ImagePtr &image_msg,
+                    const sensor_msgs::CameraInfoPtr &cinfo_msg) override;
 
  private:
   UsbCamera usb_camera_;

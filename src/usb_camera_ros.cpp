@@ -2,7 +2,8 @@
 
 namespace usb_camera {
 
-bool UsbCameraRos::Grab(const sensor_msgs::ImagePtr &image_msg) {
+bool UsbCameraRos::Grab(const sensor_msgs::ImagePtr &image_msg,
+                        const sensor_msgs::CameraInfoPtr &cinfo_msg) {
   cv::Mat image;
   if (!usb_camera_.GrabImage(image)) {
     return false;
