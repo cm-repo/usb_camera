@@ -4,6 +4,7 @@
     <arg name="frame_id" default="webcam"/>
     <arg name="camera" default="webcam"/>
     <arg name="fps" default="15.0"/>
+    <arg name="color" default="false"/>
     <arg name="calib_url"
         default="package://usb_camera/calib/calib_$(arg camera).yml"/>
 
@@ -33,14 +34,8 @@
         <param name="camera" type="string" value="$(arg camera)"/>
         <param name="calib_url" type="string" value="$(arg calib_url)"/>
         <param name="fps" type="double" value="$(arg fps)"/>
+        <param name="color" type="bool" value="$(arg color)"/>
     </node>
-
-    <!-- Proc -->
-    <!-- This does not work now -->
-    <include if="$(arg proc)" ns="$(arg camera)"
-        file="$(find image_proc)/launch/image_proc.launch">
-        <arg name="manager" value="$(arg manager)"/>
-    </include>
 
     <!-- View -->
     <node if="$(arg view)" pkg="image_view" type="image_view"
