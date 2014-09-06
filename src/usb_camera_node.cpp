@@ -5,7 +5,7 @@ namespace usb_camera {
 void UsbCameraNode::Acquire() {
   while (is_acquire() && ros::ok()) {
     ros::Time time = ros::Time::now();
-    usb_camera_ros_.Publish(time);
+    usb_camera_ros_.PublishCamera(time);
     Sleep();
   }
 }
