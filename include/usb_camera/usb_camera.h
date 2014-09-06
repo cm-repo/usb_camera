@@ -12,7 +12,7 @@ namespace usb_camera {
 
 class UsbCamera {
  public:
-  UsbCamera(int device) : device_{std::to_string(device)}, capture_{device} {
+  UsbCamera(int device) : device_(std::to_string(device)), capture_(device) {
     if (!capture_.isOpened()) {
       throw std::runtime_error(std::string("Invalid device id: ") + device_);
     }

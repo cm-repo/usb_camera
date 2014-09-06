@@ -12,6 +12,7 @@ void UsbCameraNode::Acquire() {
 
 void UsbCameraNode::Setup(UsbCameraDynConfig& config) {
   usb_camera_ros_.set_fps(config.fps);
+  usb_camera_ros_.set_color(config.color);
 }
 
 }  // namespace usb_camera

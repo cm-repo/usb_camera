@@ -8,8 +8,14 @@ bool UsbCameraRos::Grab(const sensor_msgs::ImagePtr &image_msg,
   if (!usb_camera_.GrabImage(image)) {
     return false;
   }
+  // Color option
+  if (color() && (image.channels() == 1)) {
+    cv::cvtColor(image, image, CV_GRAY2BGR);
+  } else if (!color() && (image.channels() == 3)) {
+    cv::cvtColor(image, image, CV_BGR2GRAY);
+  }
   // Assemble image_msg
-  auto channels = image.channels();
+  const auto channels = image.channels();
   image_msg->height = image.rows;
   image_msg->width = image.cols;
   image_msg->step = image_msg->width * channels;
