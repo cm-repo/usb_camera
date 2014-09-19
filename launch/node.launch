@@ -33,8 +33,8 @@
 
     <!-- View -->
     <node if="$(arg view)" pkg="image_view" type="image_view"
-        name="$(arg camera)_raw" output="$(arg output)"
-        args="image:=/$(arg camera)/image_raw">
+        name="viewer" output="$(arg output)" ns="$(arg camera)"
+        args="image:=image_raw">
     </node>
 
     <!-- Calib -->
