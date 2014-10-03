@@ -1,12 +1,15 @@
 <launch>
-    <!-- Camera Settings -->
+    <!-- Common Interface -->
     <arg name="device" default="0"/>
-    <arg name="frame_id" default="webcam"/>
-    <arg name="camera" default="webcam"/>
-    <arg name="fps" default="15.0"/>
+    <arg name="rate" default="20"/>
+
+    <!-- Camera Settings -->
+    <arg name="camera_name" default="webcam"/>
+    <arg name="camera" default="$(arg camera_name)"/>
+    <arg name="frame_id" default="$(arg camera)"/>
+    <arg name="fps" default="$(arg rate)"/>
     <arg name="color" default="false"/>
-    <arg name="calib_url"
-        default="package://usb_camera/calib/calib_$(arg camera).yml"/>
+    <arg name="calib_url" default="package://usb_camera/calib/calib_$(arg camera_name).yml"/>
 
     <!-- Node Settings -->
     <arg name="output" default="screen"/>
@@ -15,8 +18,8 @@
     <arg name="view" default="false"/>
 
     <!-- Standalone -->
-    <arg unless="$(arg plugin)" name="option"
-        value="standalone usb_camera/UsbCameraNodelet"/>
+    <arg unless="$(arg plugin)"
+        name="option" value="standalone usb_camera/UsbCameraNodelet"/>
 
     <!-- Manager -->
     <arg name="manager" default="usb_camera_nodelet"/>
@@ -31,9 +34,9 @@
     <node pkg="nodelet" type="nodelet" name="$(arg camera)"
         output="$(arg output)" args="$(arg option)">
         <param name="identifier" type="string" value="$(arg device)"/>
-        <param name="frame_id" type="string" value="$(arg frame_id)"/>
-        <param name="camera" type="string" value="$(arg camera)"/>
+        <param name="camera_name" type="string" value="$(arg camera_name)"/>
         <param name="calib_url" type="string" value="$(arg calib_url)"/>
+        <param name="frame_id" type="string" value="$(arg frame_id)"/>
         <param name="fps" type="double" value="$(arg fps)"/>
         <param name="color" type="bool" value="$(arg color)"/>
     </node>
@@ -51,8 +54,9 @@
     </node>
 
     <!-- View -->
-    <node if="$(arg view)" pkg="image_view" type="image_view"
-        name="viewer" output="$(arg output)" ns="$(arg camera)"
-        args="image:=image_raw">
+    <arg name="image" default="image_raw"/>
+    <node if="$(arg view)"
+        pkg="image_view" type="image_view" name="viewer" output="$(arg output)"
+        ns="$(arg camera)" args="image:=$(arg image)">
     </node>
 </launch>
