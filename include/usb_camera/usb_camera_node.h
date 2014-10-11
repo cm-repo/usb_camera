@@ -7,7 +7,7 @@
 
 namespace usb_camera {
 
-class UsbCameraNode : public CameraNodeBase<UsbCameraDynConfig> {
+class UsbCameraNode : public camera_base::CameraNodeBase<UsbCameraDynConfig> {
  public:
   UsbCameraNode(const ros::NodeHandle& nh)
       : CameraNodeBase{nh}, usb_camera_ros_{nh} {}

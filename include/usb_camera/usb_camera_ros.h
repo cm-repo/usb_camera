@@ -6,7 +6,7 @@
 
 namespace usb_camera {
 
-class UsbCameraRos : public CameraRosBase {
+class UsbCameraRos : public camera_base::CameraRosBase {
  public:
   UsbCameraRos(const ros::NodeHandle &nh)
       : CameraRosBase(nh),
